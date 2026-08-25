@@ -1,4 +1,4 @@
-name: Publicar imagen en Docker Hub
+name: Publicar imagen y desplegar
 
 on:
   push:
@@ -6,17 +6,19 @@ on:
       - main
 
 jobs:
-test:
+
+  test:
+    name: Ejecutar pruebas
     runs-on: ubuntu-latest
 
     steps:
-      - name: Descargar codigo
+      - name: Descargar código
         uses: actions/checkout@v4
 
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: "3.13"
 
       - name: Instalar dependencias
         run: |
@@ -24,15 +26,21 @@ test:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Ejecutar las pruebas
+      - name: Ejecutar pruebas
         run: pytest
-    build-and-deploy:
+
+
+  build-and-deploy:
+    name: Construir y desplegar
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
       - name: Descargar código
         uses: actions/checkout@v4
-        
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Iniciar sesión en Docker Hub
         uses: docker/login-action@v3
@@ -46,7 +54,7 @@ test:
           context: .
           push: true
           tags: neyireth/mi-ejemplo:latest
-      
+
       - name: Desplegar en el servidor cloud
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -54,6 +62,7 @@ test:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd ~/docker
-            docker compose pull app-backend
-            docker compose up -d
+            cd /RUTA_REAL_DEL_PROYECTO
+            docker compose pull backend
+            docker compose up -d backend
+            docker image prune -f
