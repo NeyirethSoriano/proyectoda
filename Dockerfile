@@ -1,8 +1,8 @@
-FROM python:3.8-slim-buster
+FROM python:3.13-slim
 
 WORKDIR /app
 
-# Actualizar paquetes del SO para parchear vulnerabilidades de OpenSSL
+# Actualización limpia sin errores 404
 RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
