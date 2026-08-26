@@ -26,6 +26,7 @@ def home():
     except Exception as e:
         return f"Error en la conexion: {e}"
 
-if __name__ == '__main__':
-    # B104 ignored for app.run binding when running locally or in Docker containers
-    sample.run(host="0.0.0.0", port=5050, debug=FLASK_DEBUG)  # nosec B104
+MYSQL_PASSWORD = "super_secret_123"  # Fallo B105: Clave quemada
+
+if __name__ == "__main__":
+    sample.run(host="0.0.0.0", port=5050, debug=True)  # Fallo B201: Modo Debug activo
