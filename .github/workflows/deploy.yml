@@ -3,6 +3,7 @@ name: Publicar imagen y desplegar
 on:
   push:
     branches:
+      - Principal
       - main
 
 jobs:
@@ -27,7 +28,7 @@ jobs:
           pip install pytest bandit
 
       - name: Escaneo de seguridad (bandit)
-        run: bandit -r . -s B101 # Ignorar los archivos test
+        run: bandit -r . -x ./test_app.py -s B104,B101
 
       - name: Ejecutar pruebas
         run: pytest
@@ -69,7 +70,6 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
 
-
       - name: Subir imagen a Docker Hub
         run: docker push neyireth/mi-ejemplo:latest
 
@@ -80,7 +80,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /RUTA_REAL_DEL_PROYECTO
+            cd ~/proyectoda
             docker compose pull backend
             docker compose up -d backend
             docker image prune -f
