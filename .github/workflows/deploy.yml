@@ -28,7 +28,7 @@ jobs:
           pip install pytest bandit
 
       - name: Escaneo de seguridad (bandit)
-        run: bandit -r . -x ./test_app.py -s B104,B101
+        run: bandit -r . -x ./venv,./test_app.py -s B104,B101
 
       - name: Ejecutar pruebas
         run: pytest
