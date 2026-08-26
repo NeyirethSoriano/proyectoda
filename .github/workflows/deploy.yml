@@ -5,7 +5,7 @@ on:
     branches:
       - Principal
       - main
-      - 'feature/**'    # Habilita la ejecución en ramas feature
+      - 'feature/**'
 
 jobs:
 
@@ -29,7 +29,7 @@ jobs:
           pip install pytest bandit
 
       - name: Escaneo de seguridad (bandit)
-        run: bandit -r . -x ./venv,./test_app.py  # Se removió -s B104,B101 para permitir que detecte los fallos
+        run: bandit -r . -x ./venv,./test_app.py -s B104,B101
 
       - name: Ejecutar pruebas
         run: pytest

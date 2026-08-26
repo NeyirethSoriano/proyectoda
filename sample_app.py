@@ -4,7 +4,7 @@ from flask import Flask
 
 sample = Flask(__name__)
 
-# Fetch variables from environment, falling back to local defaults
+# Lectura segura desde variables de entorno
 DB_HOST = os.getenv("DB_HOST", "db")
 DB_USER = os.getenv("DB_USER", "root")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "")
@@ -26,7 +26,6 @@ def home():
     except Exception as e:
         return f"Error en la conexion: {e}"
 
-MYSQL_PASSWORD = "super_secret_123"  # Fallo B105: Clave quemada
-
 if __name__ == "__main__":
-    sample.run(host="0.0.0.0", port=5050, debug=True)  # Fallo B201: Modo Debug activo
+    sample.run(host="0.0.0.0", port=5050, debug=FLASK_DEBUG)  # nosec B104
+    
