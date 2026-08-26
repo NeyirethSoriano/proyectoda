@@ -1,0 +1,4 @@
+[15/Aug/2026:00:56:44 +0000] 200 - HEAD http localhost "/" [Client 172.20.0.1] [Length 0] [Gzip -] "curl/8.18.0" "-"
+[15/Aug/2026:00:58:18 +0000] 200 - HEAD http localhost "/" [Client 172.20.0.1] [Length 0] [Gzip -] "curl/8.18.0" "-"
+[15/Aug/2026:02:00:37 +0000] 200 - HEAD http uptimeejerciciosda.duckdns.org "/" [Client 172.20.0.1] [Length 0] [Gzip -] "curl/8.18.0" "-"
+[15/Aug/2026:02:01:53 +0000] 200 - HEAD http uptimeejerciciosda.duckdns.org "/" [Client 172.20.0.1] [Length 0] [Gzip -] "curl/8.18.0" "-"

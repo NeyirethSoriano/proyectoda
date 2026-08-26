@@ -1,25 +1,31 @@
-from flask import Flask, render_template
+import os
 import pymysql
+from flask import Flask
 
 sample = Flask(__name__)
+
+# Fetch variables from environment, falling back to local defaults
+DB_HOST = os.getenv("DB_HOST", "db")
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "")
+DB_NAME = os.getenv("DB_NAME", "adso_db_ejemplo")
+FLASK_DEBUG = os.getenv("FLASK_DEBUG", "False").lower() in ("true", "1", "t")
 
 @sample.route("/")
 def home():
     try:
-        # Vamos a intentar conectarnos a la BD
         conn = pymysql.connect(
-            host="servidor-bd-ejemplo",
-            user="root",
-            password="sena123",
-            database="adso_db_ejemplo",
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME,
             connect_timeout=3
-		)
+        )
         conn.close()
-        db_status= "Conexion exitosa a la BD!"
+        return "Conexion exitosa a la BD!"
     except Exception as e:
-        db_status = f"Error en la conexion: {e}"
-
-    return render_template("index.html", db_status=db_status)
+        return f"Error en la conexion: {e}"
 
 if __name__ == '__main__':
-    sample.run(host="0.0.0.0", port=5050, debug=True)
+    # B104 ignored for app.run binding when running locally or in Docker containers
+    sample.run(host="0.0.0.0", port=5050, debug=FLASK_DEBUG)  # nosec B104
