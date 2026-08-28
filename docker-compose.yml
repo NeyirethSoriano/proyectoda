@@ -44,6 +44,20 @@ services:
     container_name: uptime-kuma
     restart: always
 
+
+  Dozzle:
+    image: Amir20/Dozzle:Más Recientes
+    container_name: dozzle
+    Reiniciar: siempre
+    Volúmenes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    Puertos:
+      - "8080:8080"
+    Redes:
+      - red-cba
+
+  
+
     ports:
       - "3001:3001"
 
