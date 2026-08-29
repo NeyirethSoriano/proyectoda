@@ -4,124 +4,53 @@ services:
     image: jc21/nginx-proxy-manager:latest
     container_name: proxy-manager
     restart: always
-
     ports:
       - "80:80"
       - "81:81"
       - "443:443"
-
     volumes:
       - ./npm_data:/data
       - ./npm_letsencrypt:/etc/letsencrypt
-
     networks:
       - red-cba
-
 
   backend:
     image: neyireth/mi-ejemplo:latest
     container_name: backend
     restart: always
-
     ports:
       - "5050:5050"
-
     env_file:
       - .env
-
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5050/ || exit 1"]
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:5050/\")' || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
-
     networks:
       - red-cba
-
 
   uptime-kuma:
     image: louislam/uptime-kuma:latest
     container_name: uptime-kuma
     restart: always
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./uptime-kuma:/app/data
+    networks:
+      - red-cba
 
   dozzle:
     image: amir20/dozzle:latest
     container_name: dozzle
     restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "8080:8080"
-    networks:
-      - red-cba
-
-    ports:
-      - "3001:3001"
-
     volumes:
-      - ./uptime-kuma:/app/data
-
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - red-cba
-
-
-networks:
-  red-cba:
-    name: red-cbaservices:
-
-  nginx-proxy-manager:
-    image: jc21/nginx-proxy-manager:latest
-    container_name: proxy-manager
-    restart: always
-
-    ports:
-      - "80:80"
-      - "81:81"
-      - "443:443"
-
-    volumes:
-      - ./npm_data:/data
-      - ./npm_letsencrypt:/etc/letsencrypt
-
-    networks:
-      - red-cba
-
-
-  backend:
-    image: neyireth/mi-ejemplo:latest
-    container_name: backend
-    restart: always
-
-    ports:
-      - "5050:5050"
-
-    env_file:
-      - .env
-
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5050/ || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-    networks:
-      - red-cba
-
-
-  uptime-kuma:
-    image: louislam/uptime-kuma:latest
-    container_name: uptime-kuma
-    restart: always
-
-    ports:
-      - "3001:3001"
-
-    volumes:
-      - ./uptime-kuma:/app/data
-
-    networks:
-      - red-cba
-
 
 networks:
   red-cba:
